@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class Main {
@@ -38,41 +40,77 @@ public class Main {
     }
 
     private static void exibirMenuPrincipal() {
-        System.out.println("\n=== CONVERSOR DE MOEDAS ===");
-        System.out.println("1 - Conversor de moedas");
-        System.out.println("2 - Como Funciona");
-        System.out.println("3 - Sair");
-        System.out.print("Escolha uma opção: ");
+        System.out.print("""
+                === CONVERSOR DE MOEDAS ===
+                
+                1 - Conversor de moedas
+                2 - Como Funciona
+                3 - Sair
+                
+                Escolha uma opção:""");
     }
 
     private static void exibirComoFunciona() {
-        System.out.println("\nCOMO FUNCIONA:");
-        System.out.println("1. Escolha a moeda de origem");
-        System.out.println("2. Escolha a moeda de destino");
-        System.out.println("3. Digite o valor a ser convertido");
-        System.out.println("4. O sistema mostrará o resultado da conversão");
-        System.out.println("5. Pode repetir o processo ou voltar ao menu principal");
+        System.out.println("""
+                COMO FUNCIONA:
+                
+                1. Escolha a moeda de origem
+                2. Escolha a moeda de destino
+                3. Digite o valor a ser convertido
+                4. O sistema mostrará o resultado da conversão
+                5. Pode repetir o processo ou voltar ao menu principal
+                """);
     }
 
-    private static void realizarConversao() throws IOException, InterruptedException {
+    private static void realizarConversao() throws IOException, InterruptedException, IllegalArgumentException {
         boolean continuar = true;
         while (continuar) {
             exibirMoedas();
             System.out.print("\nEscolha a moeda de origem (1-6): ");
             int moedaOrigem = scanner.nextInt() - 1;
+            try {
+                if (moedaOrigem < 0 || moedaOrigem > 5) {
+                    throw new IllegalArgumentException("Opção inválida! Tente novamente.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
 
             System.out.print("Escolha a moeda de destino (1-6): ");
             int moedaDestino = scanner.nextInt() - 1;
+            try {
+                if (moedaDestino < 0 || moedaDestino > 5) {
+                    throw new IllegalArgumentException("Opção inválida! Tente novamente.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
 
             System.out.print("Digite o valor a ser convertido: ");
-            double valor = scanner.nextDouble();
+            double valor;
+            while (true) {
+                try {
+                    String input = scanner.next();
+                    if (!input.matches("^\\d*[.,]?\\d{0,2}$")) {
+                        throw new IllegalArgumentException("Por favor, digite um número com no máximo duas casas decimais.");
+                    }
+                    valor = new DecimalFormat().parse(input).doubleValue();
+                    break;
+                } catch (IllegalArgumentException | ParseException e) {
+                    System.out.println(e.getMessage());
+                    System.out.print("Digite o valor novamente: ");
+                }
+            }
+
 
             double resultado = apiClient.conversorMoedas(MOEDAS[moedaOrigem], MOEDAS[moedaDestino], valor);
             System.out.printf("%.2f %s = %.2f %s%n",
                     valor, MOEDAS[moedaOrigem], resultado, MOEDAS[moedaDestino]);
 
             System.out.println("\n1 - Converter novo valor");
-            System.out.println("2 - Voltar ao menu principal");
+            System.out.println("2 - Voltar ao menu principal\n");
             System.out.print("Escolha uma opção: ");
             continuar = scanner.nextInt() == 1;
         }
