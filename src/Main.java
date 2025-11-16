@@ -51,6 +51,7 @@ public class Main {
         System.out.println("2. Escolha a moeda de destino");
         System.out.println("3. Digite o valor a ser convertido");
         System.out.println("4. O sistema mostrará o resultado da conversão");
+        System.out.println("5. Pode repetir o processo ou voltar ao menu principal");
     }
 
     private static void realizarConversao() throws IOException, InterruptedException {
