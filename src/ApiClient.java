@@ -1,3 +1,7 @@
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,7 +20,8 @@ public class ApiClient {
         }
     }
 
-    public String conversorMoedas(String moedaBase, String moedaFinal) throws IOException, InterruptedException {
+    public double conversorMoedas(String moedaBase, String moedaFinal, double valorParaConverter)
+            throws IOException, InterruptedException {
 
         String baseUrl = "https://v6.exchangerate-api.com/v6/";
         String url = baseUrl + apiKey + "/pair/" + moedaBase + "/" +  moedaFinal;
@@ -27,12 +32,16 @@ public class ApiClient {
                 .header("Accept", "application/json")
                 .build();
 
-        System.out.println("Enviando requisição para: " + url);
+        System.out.println("Enviando requisição para: " + baseUrl);
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request,
+                HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            return response.body();
+            JsonElement jsonElement = JsonParser.parseString(response.body());
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            double cambio = jsonObject.get("conversion_rate").getAsDouble();
+            return cambio * valorParaConverter;
         } else {
             throw new IOException("Falha na requisição. Código: " + response.statusCode());
         }
