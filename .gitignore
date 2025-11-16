@@ -1,29 +1,63 @@
-### IntelliJ IDEA ###
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# Arquivos gerados pela compilação do Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Logs e arquivos de runtime do Java
+*.log
+hs_err_pid*
+replay_pid*
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
+# Pastas de build (Maven, Gradle)
+/target/
+/build/
+/out/
+
+# Arquivos do Maven
+pom.xml.bak
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+
+# Arquivos do Gradle
+/.gradle/
+/gradle/
+!/gradle/wrapper/gradle-wrapper.jar
+!/gradlew
+!/gradlew.bat
+
+# Arquivos de IDEs
+
+# IntelliJ IDEA
+/.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+/.settings/
+/.project
+/.classpath
+*.factorypath
+
+# NetBeans
+/nbproject/
 /dist/
+/nbbuild/
 /nbdist/
-/.nb-gradle/
 
-### VS Code ###
-.vscode/
+# VS Code
+/.vscode/
 
-### Mac OS ###
+# Arquivos de Sistema Operacional
 .DS_Store
+Thumbs.db
+
+# Arquivos de segredos e configuração local
+.env
+local.properties
